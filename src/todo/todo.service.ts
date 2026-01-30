@@ -14,4 +14,18 @@ export class TodoService {
   create(title: string) {
     return this.prismaService.todo.create({ data: { title } });
   }
+
+  async toggle(id: number) {
+    const todo = await this.prismaService.todo.findUniqueOrThrow({
+      where: { id },
+    });
+    return this.prismaService.todo.update({
+      where: { id },
+      data: { completed: !todo.completed },
+    });
+  }
+
+  delete(id: number) {
+    return this.prismaService.todo.delete({ where: { id } });
+  }
 }
